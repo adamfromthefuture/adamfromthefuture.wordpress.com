@@ -1,0 +1,9 @@
+ena
+conf t
+hostname [Hostname]
+no ip domain-lookup
+line con 0
+logging synchronous 
+no exec-timeout
+privilege level 15
+end
