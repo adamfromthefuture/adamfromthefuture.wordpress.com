@@ -4,6 +4,6 @@ hostname [Hostname]
 no ip domain-lookup
 line con 0
 logging synchronous 
-no exec-timeout
+exec-timeout 0 0
 privilege level 15
 end
