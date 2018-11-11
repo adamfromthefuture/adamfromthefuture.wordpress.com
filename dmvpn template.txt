@@ -1,0 +1,61 @@
+Note: Replace the IP addresses based on your design
+============================================================================
+	Hub Configuration
+============================================================================
+crypto isakmp policy 10
+hash md5
+authentication pre-share
+
+crypto isakmp key supersecure address 0.0.0.0 0.0.0.0
+crypto ipsec transform-set ts_dmvpn esp-3des esp-md5-hmac
+
+crypto ipsec profile prof_dmvpn
+set transform-set ts_dmvpn
+
+interface Tunnel1
+ip address 172.16.100.1 255.255.255.0
+no ip redirects
+ip mtu 1440
+ip nhrp authentication secure
+ip nhrp map multicast dynamic
+ip nhrp network-id 1
+tunnel source GigabitEthernet0/2
+tunnel mode gre multipoint
+tunnel key 0
+tunnel protection ipsec profile prof_dmvpn
+
+============================================================================
+	Spoke Configuration
+============================================================================
+crypto isakmp policy 10
+hash md5
+authentication pre-share
+
+crypto isakmp key supersecure address 0.0.0.0 0.0.0.0
+crypto ipsec transform-set ts_dmvpn esp-3des esp-md5-hmac
+
+crypto ipsec profile prof_dmvpn
+set transform-set ts_dmvpn
+
+
+interface Tunnel1
+ip address 172.16.100.2 255.255.255.0
+no ip redirects
+ip mtu 1440
+ip nhrp authentication secure
+ip nhrp map multicast dynamic
+ip nhrp map 172.16.100.1 192.168.100.1
+ip nhrp map multicast 192.168.100.1
+ip nhrp network-id 1
+ip nhrp nhs 172.16.100.1
+tunnel source GigabitEthernet0/2
+tunnel mode gre multipoint
+tunnel key 0
+tunnel protection ipsec profile prof_dmvpn
+
+============================================================================
+	Verification
+============================================================================
+show crypto isakmp sa
+show crypto ipsec sa
+show crypto engine connection active
